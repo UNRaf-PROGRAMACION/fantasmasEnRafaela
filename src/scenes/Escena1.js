@@ -8,8 +8,13 @@ export default class Scene1 extends Phaser.Scene {
     }
   
     init() {
-      let score=0;
-  
+      this.puntaje=0;
+      console.log("score");
+      this.lives=3;
+      this.isWinner=false;
+      this.isGameOver=false;
+    this.timer=10;
+
      
     }
   
@@ -17,14 +22,12 @@ export default class Scene1 extends Phaser.Scene {
       // todo / para hacer: texto de puntaje
       const map = this.make.tilemap({ key: "map" });
   
-      // Parameters are the name you gave the tileset in Tiled and then the key of the tileset image in
-      // Phaser's cache (i.e. the name you used in preload)
+    //cargar imagenes
       const capaFondo = map.addTilesetImage("piso", "tilePiso");
       const capaTecho = map.addTilesetImage("atlas-techo", "tileTecho");
       const capaPlataformas = map.addTilesetImage("wall", "tilePared");
       const capaBarra=map.addTilesetImage("info-bar", "barra");
-
-      const fondoLayer = map.createLayer(
+       const fondoLayer = map.createLayer(
         "fondo", 
       capaFondo, 
       0, 0);
@@ -38,7 +41,7 @@ export default class Scene1 extends Phaser.Scene {
         "plataformas", 
         capaPlataformas,
         0,0);
-        const barraLayer = map.createLayer (
+      const barraLayer = map.createLayer (
           "barra",
           capaBarra,
           0,
@@ -46,7 +49,7 @@ export default class Scene1 extends Phaser.Scene {
         );
 
       const objectosLayer = map.getObjectLayer("objetos");
-  
+      
       paredLayer.setCollisionByProperty({ colision: true });
       techoLayer.setCollisionByProperty({ colision: true });
 
@@ -58,48 +61,102 @@ export default class Scene1 extends Phaser.Scene {
       this.jugador.setCollideWorldBounds(true);
       console.log(this.jugador)
       this.jugador.body.allowGravity = false;
+
       
       // Enemigo y sus configuraciones
       let enemyPoint = map.findObject("objetos", (obj) => obj.name === "enemigo");
       console.log(enemyPoint);
+      let enemyX = enemyPoint.x;
+      let enemyY = enemyPoint.y;
+       // ataque del enemigo
+      const circle = new Phaser.Geom.Circle(enemyX, enemyY, 300);
+      const randomBalls = Phaser.Math.RND.between(8, 34);
+      this.balls = this.add.group({ key: 'ball', frameQuantity: randomBalls, });
+  
+      Phaser.Actions.PlaceOnCircle(this.balls.getChildren(), circle);
+      this.tween = this.tweens.addCounter({
+          from: 0,
+          to: 700,
+          duration: 4000,
+          delay: 1000,
+          ease: 'Sine.easeInOut',
+          repeat: -1,
+          yoyo: false,
+      });
       this.enemigo = this.physics.add.sprite(enemyPoint.x, enemyPoint.y, "fantasma");
       this.enemigo.setCollideWorldBounds(true);
-      let end=map.findObject("objetos", (obj) => obj.name==="inicio");
-      let endY=map.findObject("objetos", (obj) => obj.name==="fin");
+      this.enemigo.anims.play('downEnemy', true)
+      const randomDuration = Phaser.Math.RND.between(1500, 2000);
+      const duration = randomDuration;
+      const startY = 600;
       this.tweens.add ({
         targets: this.enemigo,
         x: 600,
-        y: 200,
-        duration:2000,
+        y: 150,
+        duration:duration,
         repeat: -1,
         yoyo: true,
-
-      })
-
-//objetos
-      this.puerta=this.add.group()
-      objectosLayer.objects.forEach((objData) => {
-        const { x = 0, y = 0, name } = objData;
-        switch (name) {
-          case "puerta": {
-            const puerta = this.puerta.create(x, y, "puerta");
-            break;
-          }
-        }
       });
       
+      
+      
   
-      //  Input Events
-      this.cursors = this.input.keyboard.createCursorKeys();
-  
-    
+
+//objetos
+let salida2 = map.findObject("objetos", (obj) => obj.name === "salida");
+this.salida2 = this.physics.add
+      .sprite(salida2.x, salida2.y, "puerta2")
+      this.salida2.body.allowGravity = false;
+
+let salida = map.findObject("objetos", (obj) => obj.name === "salida");
+this.salida = this.physics.add
+      .sprite(salida.x, salida.y, "puerta1")
+this.salida.body.allowGravity = false;
+
+let tesoro = map.findObject("objetos", (obj) => obj.name === "tesoro");
+ this.treasure = this.physics.add.sprite(tesoro.x, tesoro.y, "tesoro")
+ .setScale(2)
+ .setVisible(false)
+this.treasure.body.allowGravity=false;
+ this.treasure.anims.play('treasureLoop', true);
+
+  //  Input Events
+ this.cursors = this.input.keyboard.createCursorKeys();
+      
     
   //Físicas del juego
      this.physics.add.collider(this.jugador, paredLayer);
      this.physics.add.collider(this.jugador, techoLayer);
      this.physics.add.collider(this.enemigo, paredLayer);
      this.physics.add.collider(this.enemigo, techoLayer);
-     this.physics.add.collider(this.jugador, this.enemigo);
+     this.physics.add.collider(
+      this.jugador, 
+      this.enemigo,
+      this.recibirAtaque,
+      null,
+      this);
+      this.physics.world.collide(
+        this.jugador,
+        this.balls,
+        this.disparos,
+        null, 
+        this
+      );
+      this.physics.add.overlap(
+        this.jugador,
+        this.salida2,
+        this.nextLevel,
+        null, 
+        this
+      );
+      this.physics.add.collider(
+        this.jugador,
+        this.treasure,
+        this.abrirSalida,
+        null,
+        this
+      )
+
      /* this.physics.add.collider(this.estrellas, plataformaLayer);
       this.physics.add.collider(
         this.jugador,
@@ -115,44 +172,79 @@ export default class Scene1 extends Phaser.Scene {
         this.esVencedor,
         () => this.cantidadEstrellas >= 5, // condicion de ejecucion
         this
-      );
+      );*/
   
-      /// mostrar cantidadEstrella en pantalla
-      this.cantidadEstrellasTexto = this.add.text(
+      /// Textos en pantalla
+      this.livesText = this.add.text(
         15,
         15,
-        "Estrellas recolectadas: 0",
-        { fontSize: "15px", fill: "#FFFFFF" }
+        "LIVES:" + this.lives,
+        { fontSize: "30px",
+         fill: "#703F03", 
+         fontFamily:"Lucida Console",
+         fontWeight:"bold",}
       );
-      */  }
-  
+
+      this.score = this.add.text(
+        300,
+        15,
+        'SCORE:' + this.puntaje,
+        { fontSize: "30px",
+         fill: "#703F03", 
+         fontFamily:"Lucida Console",
+         fontWeight:"bold",}
+      );
+    
+    this.timerText=this.add.text(
+      500, 
+      15,"TIME: " + this.timer,
+    { fontSize: "30px",
+         fill: "#703F03", 
+         fontFamily:"Lucida Console",
+         fontWeight:"bold",});
+
+ //evento de vida
+      this.time.addEvent({
+        delay:1000,
+        callback: this.updateLives,
+        callbackScope:this,
+        loop: true,
+      });
+  //Evento de contador
+  this.time.addEvent({
+    delay:1000,
+    callback: this.updateTimer,
+    callbackScope:this,
+    loop: true,
+  });
+      }
     update() {
      
+      //movimientos jugador
       if (this.cursors.left.isDown) {
-        this.jugador.setVelocityX(-160);
+        this.jugador.setVelocityX(-200);
         this.jugador.setVelocityY(0);
         this.jugador.flipX=false;
         this.jugador.anims.play("left", true);
       }
       //move right
       else if (this.cursors.right.isDown) {
-        this.jugador.setVelocityX(160);
+        this.jugador.setVelocityX(200);
         this.jugador.setVelocityY(0);
         this.jugador.flipX=true;
         this.jugador.anims.play("left", true);
       
       } 
       else if (this.cursors.up.isDown ) {
-        this.jugador.setVelocityY(-160);
+        this.jugador.setVelocityY(-200);
         this.jugador.setVelocityX(0);
         this.jugador.anims.play("top", true);
       }
       else if (this.cursors.down.isDown){
-        this.jugador.setVelocityY(160);
+        this.jugador.setVelocityY(200);
         this.jugador.setVelocityX(0);
         this.jugador.anims.play("down",true);
       }
-      
       //stop
       else {
         this.jugador.setVelocityX(0);
@@ -160,27 +252,58 @@ export default class Scene1 extends Phaser.Scene {
         this.jugador.anims.play("front",true);
        
       }
+  //update de los disparos del enemigo
+      Phaser.Actions.RotateAroundDistance(this.balls.getChildren(), { x: 600, y: 300}, 0.02, this.tween.getValue());
   }
   
-   /* recolectarEstrella(jugador, estrella) {
-      estrella.disableBody(true, true);
   
-      // todo / para hacer: sumar puntaje
-      //this.cantidadEstrellas = this.cantidadEstrellas + 1;
-      this.cantidadEstrellas++;
-  
-      this.cantidadEstrellasTexto.setText(
-        "Estrellas recolectadas: " + this.cantidadEstrellas
+   recibirAtaque(jugador, enemigo) {
+      jugador.disableBody(true, true);
+      setTimeout(() => {
+        jugador.enableBody(true, jugador.x, jugador.y, true, true);
+      }, 200);
+      this.lives = this.lives - 1;
+      this.livesText.setText(
+        "LIVES " + this.lives,
       );
     }
-  
-    esVencedor(jugador, salida) {
-      // if (this.cantidadEstrellas >= 5)
-      // sacamos la condicion porque esta puesta como 4to parametro en el overlap
-  
-      console.log("estrellas recolectadas", this.cantidadEstrellas);
-  
-      this.scene.start("maze1",{cantidadEstrellas: this.cantidadEstrellas});
-    }*/
+    disparos(jugador, balls) {
+      jugador.disableBody(true, true);
+      setTimeout(() => {
+        jugador.enableBody(true, jugador.x, jugador.y, true, true);
+      }, 200);
+      this.lives = this.lives - 1;
+      this.livesText.setText(
+        "LIVES " + this.lives,
+      );
+    }
+    updateLives(){
+      if (this.lives==0){
+        this.isGameOver=true;
+      }
+      if (this.isGameOver){
+        this.scene.start("end",{lives: this.lives}); 
+      } 
+    };
+    updateTimer(){
+      this.timer--
+      if (this.timer==0){
+      this.enemigo.play('deathEnemy', true)
+       this.treasure.setVisible(true)
+      }
+      this.timerText.setText(
+        "Timer: " + this.timer + " "
+      )
   }
-  
+  abrirSalida(jugador, trasure){
+    this.treasure.disableBody(true,true)
+    this.salida.disableBody(true,true)
+  }
+  nextLevel(jugador, salida2){
+    this.isWinner=true;
+    if (this.isWinner){
+      this.scene.start("maze1", {lives:this.lives, score:this.score})
+    }
+  }
+
+}

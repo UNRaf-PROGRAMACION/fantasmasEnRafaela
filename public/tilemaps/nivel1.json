@@ -144,8 +144,8 @@
                  "type":"",
                  "visible":true,
                  "width":0,
-                 "x":602.666666666667,
-                 "y":313.333333333333
+                 "x":604.687719298246,
+                 "y":479.733333333333
                 }, 
                 {
                  "height":0,
@@ -174,26 +174,26 @@
                 {
                  "height":0,
                  "id":16,
-                 "name":"puerta",
+                 "name":"salida",
                  "point":true,
                  "rotation":0,
                  "type":"",
                  "visible":true,
                  "width":0,
-                 "x":704,
-                 "y":314.666666666667
+                 "x":673.01052631579,
+                 "y":318.035087719299
                 }, 
                 {
                  "height":0,
                  "id":17,
-                 "name":"puerta",
+                 "name":"entrada",
                  "point":true,
                  "rotation":0,
                  "type":"",
                  "visible":true,
                  "width":0,
-                 "x":78.6666666666666,
-                 "y":322.666666666667
+                 "x":76.6456140350877,
+                 "y":321.319298245614
                 }, 
                 {
                  "height":0,
@@ -218,6 +218,18 @@
                  "width":0,
                  "x":150.666666666667,
                  "y":104
+                }, 
+                {
+                 "height":0,
+                 "id":20,
+                 "name":"tesoro",
+                 "point":true,
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":0,
+                 "x":603.621052631579,
+                 "y":338.863157894737
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -226,7 +238,7 @@
          "y":0
         }],
  "nextlayerid":6,
- "nextobjectid":20,
+ "nextobjectid":21,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.10.1",

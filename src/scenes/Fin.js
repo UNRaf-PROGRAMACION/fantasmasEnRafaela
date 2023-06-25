@@ -18,10 +18,10 @@ export default class End extends Phaser.Scene {
   
     create() {
       this.cantidadEstrellasTexto = this.add.text(
-        300,
+        240,
         400,
-        "FIN! Estrellas recolectadas: " + this.cantidadEstrellas,
-        { fontSize: "15px", fill: "#FFFFFF" }
+        "GAME OVER ",
+        { fontSize: "50px", fill: "#FFFFFF" }
       );
       
         

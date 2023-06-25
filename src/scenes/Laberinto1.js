@@ -6,23 +6,19 @@ export default class Maze1 extends Phaser.Scene {
     }
   
     init() {
-      // this is called before the scene is created
-      // init variables
-      // take data passed from other scenes
-      // data object param {}
-  
-     
+     this.puntaje=0;     
     }
   
     create() {
-      // todo / para hacer: texto de puntaje
+      
       const map = this.make.tilemap({ key: "maze1" });
-  
-      // Parameters are the name you gave the tileset in Tiled and then the key of the tileset image in
-      // Phaser's cache (i.e. the name you used in preload)
+      //carga de imagenes
+      const objectosLayer = map.getObjectLayer("objetos");
       const capaFondo = map.addTilesetImage("piso", "tilePiso");
       const capaTecho = map.addTilesetImage("atlas-techo", "tileTecho");
       const capaPlataformas = map.addTilesetImage("wall", "tilePared");
+  
+      const capaBarra=map.addTilesetImage("info-bar", "barra");
 
       const fondoLayer = map.createLayer(
         "fondo", 
@@ -38,58 +34,104 @@ export default class Maze1 extends Phaser.Scene {
         "plataformas", 
         capaPlataformas,
         0,0);
+        const barraLayer = map.createLayer (
+          "barra",
+          capaBarra,
+          0,
+          0,
+        );      
+      paredLayer.setCollisionByProperty({ colision: true });
+      techoLayer.setCollisionByProperty({ colision: true });
 
-     /* const objectosLayer = map.getObjectLayer("objetos");
-  
-      plataformaLayer.setCollisionByProperty({ colision: true });
-  
-      console.log("spawn point player", objectosLayer);
-  
-      // crear el jugador
-      // Find in the Object Layer, the name "dude" and get position
-      let spawnPoint = map.findObject("objetos", (obj) => obj.name === "jugador");
-      console.log(spawnPoint);
-      // The player and its settings
-      this.jugador = this.physics.add.sprite(spawnPoint.x, spawnPoint.y, "dude");
-  
-      //  Player physics properties. Give the little guy a slight bounce.
-      this.jugador.setBounce(0.1);
-      this.jugador.setCollideWorldBounds(true);
-  
-      spawnPoint = map.findObject("objetos", (obj) => obj.name === "salida");
-      console.log("spawn point salida ", spawnPoint);
-      this.salida = this.physics.add
-        .sprite(spawnPoint.x, spawnPoint.y, "salida")
-        .setScale(0.2);
-  
-      //  Input Events
-      this.cursors = this.input.keyboard.createCursorKeys();
-  
-      // Create empty group of starts
-      this.estrellas = this.physics.add.group();
-  
-      // find object layer
-      // if type is "stars", add to stars group
-      objectosLayer.objects.forEach((objData) => {
-        //console.log(objData.name, objData.type, objData.x, objData.y);
-  
-        const { x = 0, y = 0, name } = objData;
-        switch (name) {
-          case "estrella": {
-            // add star to scene
-            // console.log("estrella agregada: ", x, y);
-            const star = this.estrellas.create(x, y, "star");
-            break;
-          }
-        }
-      });*/
-  
+//  Jugador y sus configuraciones
+let spawnPoint = map.findObject("objetos", (obj) => obj.name === "jugador");
+console.log(spawnPoint);
+this.jugador = this.physics.add.sprite(spawnPoint.x, spawnPoint.y, "fer");
+this.jugador.setBounce(0.1);
+this.jugador.setCollideWorldBounds(true);
+console.log(this.jugador)
+this.jugador.body.allowGravity = false;
+
+this.cursors = this.input.keyboard.createCursorKeys();
+//creacion de monedas
+this.monedas = this.physics.add.group();
+objectosLayer.objects.forEach((objData) => {
+ const { x = 0, y = 0, name } = objData;
+  switch (name) {
+    case "coin": {
+      const moneda = this.monedas.create(x, y, "monedas");
+      moneda.body.allowGravity = false; 
+      moneda.anims.play("coinsAnim",true)
+      break;
+    }
+  }
+});
+//fisicas del juego
+this.physics.add.collider(this.jugador, paredLayer);
+this.physics.add.collider(this.jugador, techoLayer);
+this.physics.add.collider(this.monedas, paredLayer);
+this.physics.add.collider(this.monedas, techoLayer);
+this.physics.add.collider(
+  this.jugador, 
+  this.monedas,
+  this.recolectarMoneda,
+  null,
+  this);
+ 
+this.puntajeText=this.add.text(
+    300,
+    15,
+    "SCORE: " + this.puntaje,
+    { fontSize: "30px",
+    fill: "#703F03", 
+    fontFamily:"Lucida Console",
+    fontWeight:"bold",}
+ );
     }
   
     update() {
-      // update game objects
-      // check input
+    // movimientos jugador
+     if (this.cursors.left.isDown) {
+      this.jugador.setVelocityX(-200);
+      this.jugador.setVelocityY(0);
+      this.jugador.flipX=false;
+      this.jugador.anims.play("left", true);
+    }
+    //move right
+    else if (this.cursors.right.isDown) {
+      this.jugador.setVelocityX(200);
+      this.jugador.setVelocityY(0);
+      this.jugador.flipX=true;
+      this.jugador.anims.play("left", true);
+    
+    } 
+    else if (this.cursors.up.isDown ) {
+      this.jugador.setVelocityY(-200);
+      this.jugador.setVelocityX(0);
+      this.jugador.anims.play("top", true);
+    }
+    else if (this.cursors.down.isDown){
+      this.jugador.setVelocityY(200);
+      this.jugador.setVelocityX(0);
+      this.jugador.anims.play("down",true);
+    }
+    //stop
+    else {
+      this.jugador.setVelocityX(0);
+      this.jugador.setVelocityY(0)
+      this.jugador.anims.play("front",true);
+     
+    }
     
   
+  }
+  recolectarMoneda(jugador, moneda){
+    moneda.disableBody(true, true)
+    this.puntaje+=753;
+    console.log(this.puntaje)
+    this.puntajeText.setText(
+      'SCORE: '+ this.puntaje
+    )
+
   }
 }
