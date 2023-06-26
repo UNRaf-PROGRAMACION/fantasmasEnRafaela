@@ -8,12 +8,17 @@ export default class Inicio extends Phaser.Scene {
     }
   
     init() {
+
     
     }
   
     create() {
-        this.startButton=this.add.sprite(400,400,"playButton")
-        .setInteractive();
+        this.clic=this.sound.add('clic')
+    this.background=this.add.image(400,30,'background')
+    this.menu=this.add.image(400,150,'menu').setScale(0.08)
+
+    this.startButton=this.add.sprite(400,400,"playButton")
+        .setInteractive()
     this.startButton.on('pointerover', () => {
         this.startButton.setFrame(1);
     });
@@ -21,7 +26,8 @@ export default class Inicio extends Phaser.Scene {
         this.startButton.setFrame(0);
     });
     this.startButton.on('pointerdown', () => {
-    this.scene.start('scene1');
+        this.clic.play()
+    this.scene.start('scene2');
         });
    
      }

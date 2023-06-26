@@ -5,12 +5,16 @@ export default class Maze1 extends Phaser.Scene {
       super("maze1");
     }
   
-    init() {
-     this.puntaje=0;     
+    init(data) {
+     this.puntaje=data.puntaje|| 0; 
+     this.lives=data.lives || 3;  
+     this.timer=15;
+     this.isWinner=false;
+     this.tesoroRecolectado=data.tesoroRecolectado
     }
   
     create() {
-      
+      this.coinSound=this.sound.add('coinS')
       const map = this.make.tilemap({ key: "maze1" });
       //carga de imagenes
       const objectosLayer = map.getObjectLayer("objetos");
@@ -66,6 +70,19 @@ objectosLayer.objects.forEach((objData) => {
     }
   }
 });
+let salida2 = map.findObject("objetos", (obj) => obj.name === "salida");
+this.salida2 = this.physics.add
+      .sprite(salida2.x, salida2.y, "puerta2")
+      this.salida2.body.allowGravity = false;
+
+let salida = map.findObject("objetos", (obj) => obj.name === "salida");
+this.salida = this.physics.add
+      .sprite(salida.x, salida.y, "puerta1")
+this.salida.body.allowGravity = false;
+let entrada= map.findObject("objetos", (obj) => obj.name === "entrada");
+this.entrada=this.physics.add.sprite(entrada.x,entrada.y, "puerta1");
+this.entrada.body.allowGravity=false
+this.entrada.flipX=true
 //fisicas del juego
 this.physics.add.collider(this.jugador, paredLayer);
 this.physics.add.collider(this.jugador, techoLayer);
@@ -77,61 +94,131 @@ this.physics.add.collider(
   this.recolectarMoneda,
   null,
   this);
- 
-this.puntajeText=this.add.text(
+  this.physics.add.overlap(
+    this.jugador,
+    this.salida2,
+    this.nextLevel,
+    null, 
+    this
+  );
+ //textos
+  this.livesText = this.add.text(
+    15,
+    15,
+    "LIVES:" + this.lives,
+    { fontSize: "30px",
+     fill: "#703F03", 
+     fontFamily:"Lucida Console",
+     fontWeight:"bold",}
+  );
+
+  this.score = this.add.text(
     300,
     15,
-    "SCORE: " + this.puntaje,
+    'SCORE:' + this.puntaje,
     { fontSize: "30px",
-    fill: "#703F03", 
-    fontFamily:"Lucida Console",
-    fontWeight:"bold",}
- );
+     fill: "#703F03", 
+     fontFamily:"Lucida Console",
+     fontWeight:"bold",}
+  );
+
+this.timerText=this.add.text(
+  500, 
+  15,"TIME: " + this.timer,
+{ fontSize: "30px",
+     fill: "#703F03", 
+     fontFamily:"Lucida Console",
+     fontWeight:"bold",});
+//evento del contador
+     this.time.addEvent({
+      delay:1000,
+      callback: this.updateTimer,
+      callbackScope:this,
+      loop: true,
+    });
     }
   
     update() {
-    // movimientos jugador
-     if (this.cursors.left.isDown) {
-      this.jugador.setVelocityX(-200);
-      this.jugador.setVelocityY(0);
-      this.jugador.flipX=false;
-      this.jugador.anims.play("left", true);
-    }
-    //move right
-    else if (this.cursors.right.isDown) {
-      this.jugador.setVelocityX(200);
-      this.jugador.setVelocityY(0);
-      this.jugador.flipX=true;
-      this.jugador.anims.play("left", true);
-    
-    } 
-    else if (this.cursors.up.isDown ) {
-      this.jugador.setVelocityY(-200);
-      this.jugador.setVelocityX(0);
-      this.jugador.anims.play("top", true);
-    }
-    else if (this.cursors.down.isDown){
-      this.jugador.setVelocityY(200);
-      this.jugador.setVelocityX(0);
-      this.jugador.anims.play("down",true);
-    }
-    //stop
-    else {
-      this.jugador.setVelocityX(0);
-      this.jugador.setVelocityY(0)
-      this.jugador.anims.play("front",true);
      
-    }
+      //movimientos jugador
+      if (this.cursors.left.isDown && this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S).isDown) {
+        this.jugador.setVelocityY(0);
+        this.jugador.setVelocityX(-300);
+        this.jugador.anims.play("left", true);
+      }
+      else if (this.cursors.left.isDown) {
+        this.jugador.setVelocityX(-200);
+        this.jugador.setVelocityY(0);
+        this.jugador.anims.play("left", true);
+      }
+      //move right
+      else if (this.cursors.right.isDown && this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S).isDown) {
+        this.jugador.setVelocityY(0);
+        this.jugador.setVelocityX(300);
+        this.jugador.anims.play("right", true);
+      }
+      else if (this.cursors.right.isDown) {
+        this.jugador.setVelocityX(200);
+        this.jugador.setVelocityY(0);
+        this.jugador.anims.play("right", true);
+      
+      } 
+      else if (this.cursors.up.isDown && this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S).isDown) {
+        this.jugador.setVelocityY(-300);
+        this.jugador.setVelocityX(0);
+        this.jugador.anims.play("top", true);
+      }
+      else if (this.cursors.up.isDown ) {
+        this.jugador.setVelocityY(-200);
+        this.jugador.setVelocityX(0);
+        this.jugador.anims.play("top", true);
+      }
+      else if (this.cursors.down.isDown && this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S).isDown) {
+        this.jugador.setVelocityY(300);
+        this.jugador.setVelocityX(0);
+        this.jugador.anims.play("down", true);
+      }
+      else if (this.cursors.down.isDown) {
+        this.jugador.setVelocityY(100);
+        this.jugador.setVelocityX(0);
+        this.jugador.anims.play("down", true);
+      }
+      //stop
+      else {
+        this.jugador.setVelocityX(0);
+        this.jugador.setVelocityY(0)
+        this.jugador.anims.play("front",true);
+       
+      }
     
   
   }
   recolectarMoneda(jugador, moneda){
+    this.coinSound.play()
     moneda.disableBody(true, true)
     this.puntaje+=753;
     console.log(this.puntaje)
-    this.puntajeText.setText(
-      'SCORE: '+ this.puntaje
+    this.score.setText(
+      'SCORE:'+ this.puntaje
     )
-
+  }
+  updateTimer() {
+    if (this.timer > 0) {
+      this.timer--;
+      if (this.timer === 0) {
+        this.salida.disableBody(true, true);
+        this.monedas.getChildren().forEach((moneda) => {
+          moneda.disableBody(true, true);
+        });
+      }
+      this.timerText.setText("Timer: " + this.timer + " ");
+    }
+  }
+  nextLevel(jugador, salida2){
+    this.isWinner=true;
+    if (this.isWinner){
+      this.scene.start("nivelcompleto", {lives:this.lives, puntaje:this.puntaje, tesoroRecolectado:this.tesoroRecolectado})
+    }
   }
 }
+ 

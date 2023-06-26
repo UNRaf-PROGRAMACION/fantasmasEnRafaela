@@ -16,10 +16,26 @@ export default class Preload extends Phaser.Scene {
       this.load.image("ball","./public/images/ball.png")
       this.load.image("puerta1","./public/images/puerta1.png")
       this.load.image("puerta2","./public/images/puerta2.png")
+      this.load.image('menu','./public/images/menu.png')
+      this.load.image('background',"./public/images/menu.png")
+      this.load.image('frameText','./public/images/frame.png')
+      this.load.image('bible', './public/images/bible.png')
+      this.load.audio('clic','./public/sounds/mouseclicksoundeffect.mp3')
+      this.load.audio('coinS','./public/sounds/coin.mp3');
+      this.load.audio('openDoor','./public/sounds/openDoor.mp3')
       this.load.spritesheet("playButton","./public/images/play.png", {
         frameWidth: 243,
         frameHeight: 117,
+      });
+      this.load.spritesheet("restartButton","./public/images/RESTART.png", {
+        frameWidth: 223,
+        frameHeight: 107,
       })
+      this.load.spritesheet("nextLButton","./public/images/Nextlevel.png", {
+        frameWidth: 223,
+        frameHeight: 107,
+      })
+
 
       this.load.spritesheet("fer","./public/images/PJ-Sheet.png",{
         frameWidth: 64,
@@ -29,10 +45,10 @@ export default class Preload extends Phaser.Scene {
         frameWidth: 64,
         frameHeight: 64,
     });
-    this.load.spritesheet("cofre","./public/images/cofre-Sheet.png",{
+    this.load.spritesheet("fantasma2","./public/images/FANTASMA-priestSHEET.png",{
       frameWidth: 64,
       frameHeight: 64,
-    });
+  });
     this.load.spritesheet("monedas", "./public/images/coins.png", {
       frameWidth: 32,
       frameHeight:32,
@@ -73,6 +89,12 @@ export default class Preload extends Phaser.Scene {
         repeat: -1,
       });
       this.anims.create({
+        key: "right",
+        frames: this.anims.generateFrameNumbers("fer", { start: 18, end: 21 }),
+        frameRate: 10,
+        repeat: -1,
+      })
+      this.anims.create({
         key: "downEnemy",
         frames: this.anims.generateFrameNumbers("fantasma", { start: 0, end: 2}),
         frameRate: 5,
@@ -81,6 +103,18 @@ export default class Preload extends Phaser.Scene {
       this.anims.create({
         key: "deathEnemy",
         frames: this.anims.generateFrameNumbers("fantasma", { start: 3, end: 5}),
+        frameRate: 10,
+        repeat: -1,
+      });
+      this.anims.create({
+        key: "downEnemy2",
+        frames: this.anims.generateFrameNumbers("fantasma2", { start: 0, end: 2}),
+        frameRate: 5,
+        repeat: -1,
+      });
+      this.anims.create({
+        key: "deathEnemy2",
+        frames: this.anims.generateFrameNumbers("fantasma2", { start: 3, end: 5}),
         frameRate: 10,
         repeat: -1,
       });

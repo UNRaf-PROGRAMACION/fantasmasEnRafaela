@@ -149,30 +149,6 @@
                 }, 
                 {
                  "height":0,
-                 "id":14,
-                 "name":"cofre",
-                 "point":true,
-                 "rotation":0,
-                 "type":"",
-                 "visible":true,
-                 "width":0,
-                 "x":521.333333333333,
-                 "y":184
-                }, 
-                {
-                 "height":0,
-                 "id":15,
-                 "name":"cofre",
-                 "point":true,
-                 "rotation":0,
-                 "type":"",
-                 "visible":true,
-                 "width":0,
-                 "x":273.333333333334,
-                 "y":485.333333333333
-                }, 
-                {
-                 "height":0,
                  "id":16,
                  "name":"salida",
                  "point":true,
