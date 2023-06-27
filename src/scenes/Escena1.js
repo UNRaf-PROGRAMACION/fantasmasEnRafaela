@@ -70,7 +70,7 @@ export default class Scene1 extends Phaser.Scene {
       let enemyY = enemyPoint.y;
        // ataque del enemigo
       const circle = new Phaser.Geom.Circle(enemyX, enemyY, 300);
-      const randomBalls = Phaser.Math.RND.between(6, 8);
+      const randomBalls = Phaser.Math.RND.between(8, 10);
       
       this.balls = this.physics.add.group({ key: 'ball', frameQuantity: randomBalls, });
       this.balls.children.iterate((disparo) => {

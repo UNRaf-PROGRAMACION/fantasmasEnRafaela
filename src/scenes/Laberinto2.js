@@ -5,7 +5,6 @@ export default class Maze2 extends Phaser.Scene {
       super("maze2");
     }
   
-    
     init(data) {
       this.puntaje=data.puntaje|| 0; 
       this.lives=data.lives || 3;  
@@ -16,7 +15,7 @@ export default class Maze2 extends Phaser.Scene {
    
      create() {
        this.coinSound=this.sound.add('coinS')
-       const map = this.make.tilemap({ key: "maze2" });
+       const map = this.make.tilemap({ key: "maze1" });
        //carga de imagenes
        const objectosLayer = map.getObjectLayer("objetos");
        const capaFondo = map.addTilesetImage("piso", "tilePiso");
@@ -218,7 +217,7 @@ export default class Maze2 extends Phaser.Scene {
    nextLevel(jugador, salida2){
      this.isWinner=true;
      if (this.isWinner){
-       this.scene.start("nivelcompleto", {lives:this.lives, puntaje:this.puntaje, tesoroRecolectado:this.tesoroRecolectado})
+       this.scene.start("jcompleto", {lives:this.lives, puntaje:this.puntaje, tesoroRecolectado:this.tesoroRecolectado})
      }
    }
  }

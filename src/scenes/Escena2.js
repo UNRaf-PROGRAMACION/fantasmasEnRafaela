@@ -8,8 +8,8 @@ export default class Scene1 extends Phaser.Scene {
   }
 
   init(data) {
-    this.puntaje=data.puntaje;
-    this.lives=data.lives ;
+    this.puntaje=data.puntaje||0;
+    this.lives=data.lives||4 ;
     this.isWinner=false;
     this.isGameOver=false;
   this.timer=30;
@@ -350,7 +350,7 @@ nextLevel(jugador, salida2){
   this.isWinner=true;
  
   if (this.isWinner){
-    this.scene.start("maze1", {lives:this.lives, puntaje:this.puntaje, tesoro:this.tesoroRecolectado})
+    this.scene.start("maze2", {lives:this.lives, puntaje:this.puntaje, tesoro:this.tesoroRecolectado})
   }
 }
 

@@ -1,5 +1,5 @@
 
-import Preload from "./src/scenes/Preload.js";
+import Preload from "./src/scenes/preload.js";
 import Scene1 from "./src/scenes/Escena1.js";
 import Scene2 from "./src/scenes/Escena2.js";
 import Maze1 from "./src/scenes/Laberinto1.js";
@@ -9,6 +9,7 @@ import Inicio from "./src/scenes/MainMenu.js";
 import Nivelcompleto from "./src/scenes/Nivelcompleto.js";
 import Ayuda from "./src/scenes/Controles.js"
 import Controles from "./src/scenes/Controles.js";
+import JCompleto from "./src/scenes/juegoCompleto.js";
 
 // Create a new Phaser config object
 const config = {
@@ -37,7 +38,7 @@ const config = {
   // List of scenes to load
   // Only the first scene will be shown
   // Remember to import the scene before adding it to the list
-  scene: [Preload, Scene1, Scene2,Maze1, Maze2,End, Inicio,Nivelcompleto, Controles],
+  scene: [Preload, Scene1, Scene2,Maze1, Maze2,End, Inicio,Nivelcompleto, Controles,JCompleto,],
 };
 
 // Create a new Phaser game instance
