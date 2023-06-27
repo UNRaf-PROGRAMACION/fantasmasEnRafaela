@@ -11,7 +11,7 @@ export default class End extends Phaser.Scene {
     
       console.log(data);
       this.puntaje = data.puntaje||0;
-      this.tesoroRecolectado=data.tesoro||0;
+      this.tesoroRecolectado=data.tesoroRecolectado||0
     }
   
     create() {
@@ -33,7 +33,7 @@ export default class End extends Phaser.Scene {
       this.tesoroText=this.add.text(
         100,
         400,
-        "Tesoros recolectados " + this.tesoroRecolectado,
+        "Tesoros recolectados " + this.tesoroRecolectado + " de 2",
         { fontSize: "30px", fill: "#FFFFFF" }
       )
       

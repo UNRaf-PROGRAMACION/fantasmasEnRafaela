@@ -48,7 +48,8 @@ export default class Nivelcompleto extends Phaser.Scene {
     });
     this.startButton.on('pointerdown', () => {
       this.clic.play();
-    this.scene.start('scene2', {lives:this.lives, puntaje:this.puntaje});
+    this.scene.start('scene2', {lives:this.lives, puntaje:this.puntaje, tesoroRecolectado:this.tesoroRecolectado,
+    });
         });
         
     }

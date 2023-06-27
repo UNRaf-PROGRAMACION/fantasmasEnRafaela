@@ -8,12 +8,12 @@ export default class Scene1 extends Phaser.Scene {
   }
 
   init(data) {
-    this.puntaje=data.puntaje|| 0;
-    this.lives=data.lives ||3;
+    this.puntaje=data.puntaje;
+    this.lives=data.lives ;
     this.isWinner=false;
     this.isGameOver=false;
-  this.timer=60;
-  this.tesoroRecolectado=0;
+  this.timer=30;
+  this.tesoroRecolectado=data.tesoroRecolectado;
 
    
   }
@@ -109,6 +109,17 @@ this.doorSound=this.sound.add('openDoor')
 
 
 //objetos
+this.antorchas = this.add.group();
+objectosLayer.objects.forEach((objData) => {
+ const { x = 0, y = 0, name } = objData;
+  switch (name) {
+    case "antorcha": {
+      const antorcha = this.antorchas.create(x, y, "torch");
+   
+      break;
+    }
+  }
+});
 let salida2 = map.findObject("objetos", (obj) => obj.name === "salida");
 this.salida2 = this.physics.add
     .sprite(salida2.x, salida2.y, "puerta2")
@@ -295,7 +306,8 @@ this.time.addEvent({
       this.isGameOver=true;
     }
     if (this.isGameOver){
-      this.scene.start("end",{score:this.score}); 
+      this.scene.start("end",{lives:this.lives, puntaje:this.puntaje, tesoroRecolectado:this.tesoroRecolectado,
+      }); 
     } 
   };
   updateTimer(){

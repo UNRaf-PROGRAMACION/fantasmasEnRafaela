@@ -10,10 +10,10 @@ export default class Scene1 extends Phaser.Scene {
     init() {
       this.puntaje=0;
       console.log("score");
-      this.lives=3;
+      this.lives=4;
       this.isWinner=false;
       this.isGameOver=false;
-      this.timer=60;
+      this.timer=10;
       this.tesoroRecolectado=0;
 
      
@@ -69,25 +69,27 @@ export default class Scene1 extends Phaser.Scene {
       let enemyX = enemyPoint.x;
       let enemyY = enemyPoint.y;
        // ataque del enemigo
-      const circle = new Phaser.Geom.Circle(enemyX, enemyY, 200);
-      const randomBalls = Phaser.Math.RND.between(5, 10);
+      const circle = new Phaser.Geom.Circle(enemyX, enemyY, 300);
+      const randomBalls = Phaser.Math.RND.between(6, 8);
       
       this.balls = this.physics.add.group({ key: 'ball', frameQuantity: randomBalls, });
       this.balls.children.iterate((disparo) => {
         disparo.body.allowGravity = false;
         disparo.body.enableBody=true;
         disparo.setScale(0.8)
+        
       });
   
       Phaser.Actions.PlaceOnCircle(this.balls.getChildren(), circle);
       this.tween = this.tweens.addCounter({
           from: 0,
-          to: 500,
+          to: 700,
           duration: 4000,
-          delay: 3000,
+          delay: 1000,
           ease: 'Sine.easeInOut',
           repeat: -1,
           yoyo: false,
+          
       });
    
       this.enemigo = this.physics.add.sprite(enemyPoint.x, enemyPoint.y, "fantasma");
@@ -110,6 +112,18 @@ export default class Scene1 extends Phaser.Scene {
   
 
 //objetos
+this.antorchas = this.add.group();
+objectosLayer.objects.forEach((objData) => {
+ const { x = 0, y = 0, name } = objData;
+  switch (name) {
+    case "antorcha": {
+      const antorcha = this.antorchas.create(x, y, "torch");
+   
+      break;
+    }
+  }
+});
+
 let salida2 = map.findObject("objetos", (obj) => obj.name === "salida");
 this.salida2 = this.physics.add
       .sprite(salida2.x, salida2.y, "puerta2")
@@ -280,6 +294,7 @@ this.treasure.body.enableBody=false;
       this.livesText.setText(
         "LIVES " + this.lives,
       );
+      this.puntaje=this.puntaje-20;
     }
     disparos(jugador, balls) {
       jugador.disableBody(true, true);
@@ -290,13 +305,14 @@ this.treasure.body.enableBody=false;
       this.livesText.setText(
         "LIVES " + this.lives,
       );
+      this.puntaje=this.puntaje-20;
     }
     updateLives(){
       if (this.lives<=0){
         this.isGameOver=true;
       }
       if (this.isGameOver){
-        this.scene.start("end",{score:this.score}); 
+        this.scene.start("end",{puntaje:this.puntaje}); 
       } 
     };
     updateTimer(){

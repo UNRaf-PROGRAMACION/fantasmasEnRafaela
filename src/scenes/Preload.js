@@ -20,11 +20,15 @@ export default class Preload extends Phaser.Scene {
       this.load.image('background',"./public/images/menu.png")
       this.load.image('frameText','./public/images/frame.png')
       this.load.image('bible', './public/images/bible.png')
+      this.load.image('torch','./public/images/torch1.png')
+      this.load.image('controlImagen', './public/images/controles.png')
       this.load.audio('clic','./public/sounds/mouseclicksoundeffect.mp3')
       this.load.audio('coinS','./public/sounds/coin.mp3');
+      this.load.audio('menuSound','./public/sounds/menuMusic.mp3')
       this.load.audio('openDoor','./public/sounds/openDoor.mp3')
+     
       this.load.spritesheet("playButton","./public/images/play.png", {
-        frameWidth: 243,
+        frameWidth: 242,
         frameHeight: 117,
       });
       this.load.spritesheet("restartButton","./public/images/RESTART.png", {
@@ -33,6 +37,14 @@ export default class Preload extends Phaser.Scene {
       })
       this.load.spritesheet("nextLButton","./public/images/Nextlevel.png", {
         frameWidth: 223,
+        frameHeight: 107,
+      })
+      this.load.spritesheet("menuButton","./public/images/MenuButton.png", {
+        frameWidth: 223,
+        frameHeight: 107,
+      })
+      this.load.spritesheet("controlButton","./public/images/controlButton.png", {
+        frameWidth: 222,
         frameHeight: 107,
       })
 
@@ -63,6 +75,7 @@ export default class Preload extends Phaser.Scene {
     create() {
    
       //Creacion de animaciones  
+      
      
       this.anims.create({
         key: "left",
@@ -94,6 +107,13 @@ export default class Preload extends Phaser.Scene {
         frameRate: 10,
         repeat: -1,
       })
+      this.anims.create({
+        key: "pjpunch",
+        frames: this.anims.generateFrameNumbers("fer", { start: 15, end: 17}),
+        frameRate: 3,
+        repeat: -1,
+      })
+      
       this.anims.create({
         key: "downEnemy",
         frames: this.anims.generateFrameNumbers("fantasma", { start: 0, end: 2}),
@@ -136,7 +156,14 @@ export default class Preload extends Phaser.Scene {
        frameRate:10,
         repeat:-1
   });
+  this.loading=this.add.sprite(400,300, 'fer')
+  this.loading.play('pjpunch')
+  this.loadingText=this.add.text(
+    450,
+    300,
+    "cargando..."
+  )
       // init scene juego
-      this.scene.start("inicio");
+      this.scene.start("controles")
     }
   }
