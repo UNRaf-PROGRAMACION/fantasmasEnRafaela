@@ -19,8 +19,7 @@ export default class Inicio extends Phaser.Scene {
         this.clic=this.sound.add('clic')
     this.background=this.add.image(400,30,'background')
     this.menu=this.add.image(400,150,'menu').setScale(0.08)
-    this.loading=this.add.sprite(400,300, 'fer')
-    this.loading.play('pjpunch')
+    
 
     this.startButton=this.add.sprite(400,400,"playButton")
         .setInteractive()

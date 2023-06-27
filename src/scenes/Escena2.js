@@ -69,7 +69,7 @@ this.doorSound=this.sound.add('openDoor')
     let enemyY = enemyPoint.y;
      // ataque del enemigo
     const circle = new Phaser.Geom.Circle(enemyX, enemyY, 200);
-    const randomBalls = Phaser.Math.RND.between(8, 12);
+    const randomBalls = Phaser.Math.RND.between(8, 10);
     
     this.balls = this.physics.add.group({ key: 'bible', frameQuantity: randomBalls, });
     this.balls.children.iterate((disparo) => {
