@@ -1,5 +1,3 @@
-# Phaser 3 Template
+#Fantasmas en Rafaela
 
-Plantilla para iniciar nuevos proyectos con PHASER 3.
-
-Contiene configuración inicial y buenas prácticas de estructuras de carpetas.
+Videojuego 2D pixel art realizado con el framework Phaser
