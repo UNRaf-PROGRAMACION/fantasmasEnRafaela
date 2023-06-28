@@ -1,5 +1,5 @@
 
-import Preload from "./src/scenes/preload.js";
+import Preload from "./src/scenes/Preload.js";
 import Scene1 from "./src/scenes/Escena1.js";
 import Scene2 from "./src/scenes/Escena2.js";
 import Maze1 from "./src/scenes/Laberinto1.js";
