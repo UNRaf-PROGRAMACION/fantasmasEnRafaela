@@ -13,7 +13,7 @@ export default class Scene1 extends Phaser.Scene {
       this.lives=4;
       this.isWinner=false;
       this.isGameOver=false;
-      this.timer=30;
+      this.timer=20;
       this.tesoroRecolectado=0;
 
      

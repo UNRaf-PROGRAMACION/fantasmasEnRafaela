@@ -8,9 +8,9 @@ export default class Maze1 extends Phaser.Scene {
     init(data) {
      this.puntaje=data.puntaje|| 0; 
      this.lives=data.lives || 3;  
-     this.timer=15;
+     this.timer=10;
      this.isWinner=false;
-     this.tesoroRecolectado=data.tesoroRecolectado
+     this.tesoroRecolectado=data.tesoroRecolectado||0;
     }
   
     create() {
@@ -46,7 +46,7 @@ export default class Maze1 extends Phaser.Scene {
         );      
       paredLayer.setCollisionByProperty({ colision: true });
       techoLayer.setCollisionByProperty({ colision: true });
-
+ 
 //  Jugador y sus configuraciones
 let spawnPoint = map.findObject("objetos", (obj) => obj.name === "jugador");
 console.log(spawnPoint);
@@ -83,6 +83,21 @@ let entrada= map.findObject("objetos", (obj) => obj.name === "entrada");
 this.entrada=this.physics.add.sprite(entrada.x,entrada.y, "puerta1");
 this.entrada.body.allowGravity=false
 this.entrada.flipX=true
+//texto ayuda
+this.textHelp = this.add.text(
+  100,
+  300,
+  "Recolecta las monedas antes de que se termine el tiempo!",
+  { fontSize: "18px",
+     fill: "#000000", 
+     fontFamily:"Lucida Console",
+     fontWeight:"bold",}
+);
+this.time.delayedCall(2000, () => {
+  this.textHelp.setVisible(false);
+});
+
+
 //fisicas del juego
 this.physics.add.collider(this.jugador, paredLayer);
 this.physics.add.collider(this.jugador, techoLayer);

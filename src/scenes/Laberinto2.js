@@ -8,7 +8,7 @@ export default class Maze2 extends Phaser.Scene {
     init(data) {
       this.puntaje=data.puntaje|| 0; 
       this.lives=data.lives || 3;  
-      this.timer=15;
+      this.timer=10;
       this.isWinner=false;
       this.tesoroRecolectado=data.tesoroRecolectado
      }

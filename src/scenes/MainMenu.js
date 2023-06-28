@@ -31,7 +31,10 @@ export default class Inicio extends Phaser.Scene {
     });
     this.startButton.on('pointerdown', () => {
         this.clic.play()
+
     this.scene.start('scene1');
+    this.music.stop();
+
         });
 
      this.controlButton=this.add.sprite(400,500,"controlButton")
