@@ -1,3 +1,8 @@
 #Fantasmas en Rafaela
+¿Quieres el tesoro que se esconde en los túneles? Enfrentate a los fantasmas para obtenerlo!  
 
-Videojuego 2D pixel art realizado con el framework Phaser
+Fantasmas en Rafaela es un juego 2D con estética pixelart donde, Fer, el personaje principal, ingresa dentro de túneles subterráneos en Rafaela para adquirir un tesoro de los Masones que se encuentra dentro. 
+Para lograrlo se enfrenta a diferentes fantasmas que harán lo posible para no permitirle pasar.
+
+
+
