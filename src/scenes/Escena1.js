@@ -56,7 +56,7 @@ export default class Scene1 extends Phaser.Scene {
    //  Jugador y sus configuraciones
       let spawnPoint = map.findObject("objetos", (obj) => obj.name === "jugador");
       console.log(spawnPoint);
-      this.jugador = this.physics.add.sprite(spawnPoint.x, spawnPoint.y, "fer");
+      this.jugador = this.physics.add.sprite(spawnPoint.x, spawnPoint.y, "fer").setInteractive(this.input.makePixelPerfect());
       this.jugador.setBounce(0.1);
       this.jugador.setCollideWorldBounds(true);
       console.log(this.jugador)
@@ -69,18 +69,24 @@ export default class Scene1 extends Phaser.Scene {
       let enemyX = enemyPoint.x;
       let enemyY = enemyPoint.y;
        // ataque del enemigo
-      const circle = new Phaser.Geom.Circle(enemyX, enemyY, 300);
-      const randomBalls = Phaser.Math.RND.between(8, 10);
       
-      this.balls = this.physics.add.group({ key: 'ball', frameQuantity: randomBalls, });
+      const circle = new Phaser.Geom.Circle(enemyX, enemyY, 300);
+      const randomBalls = Phaser.Math.RND.between(7, 9);
+      
+      this.balls = this.physics.add.group({ key: 'ball', frameQuantity: randomBalls, })
       this.balls.children.iterate((disparo) => {
         disparo.body.allowGravity = false;
         disparo.body.enableBody=true;
-        disparo.setScale(0.8)
+        disparo.setScale(0.8).setInteractive(this.input.makePixelPerfect());
         
       });
-  
+      
       Phaser.Actions.PlaceOnCircle(this.balls.getChildren(), circle);
+      this.time.delayedCall(1000, () => {
+        this.balls.children.iterate((disparo) => {
+          disparo.setVisible(true);
+        });
+      }, [], this);
       this.tween = this.tweens.addCounter({
           from: 0,
           to: 700,
@@ -91,6 +97,7 @@ export default class Scene1 extends Phaser.Scene {
           yoyo: false,
           
       });
+    
    
       this.enemigo = this.physics.add.sprite(enemyPoint.x, enemyPoint.y, "fantasma");
       this.enemigo.setCollideWorldBounds(true);
@@ -185,7 +192,7 @@ this.treasure.body.enableBody=false;
       );
       /// Textos en pantalla
       this.livesText = this.add.text(
-        15,
+        30,
         15,
         "LIVES:" + this.lives,
         { fontSize: "30px",
@@ -195,7 +202,7 @@ this.treasure.body.enableBody=false;
       );
 
       this.score = this.add.text(
-        300,
+        500,
         15,
         'SCORE:' + this.puntaje,
         { fontSize: "30px",
@@ -205,10 +212,10 @@ this.treasure.body.enableBody=false;
       );
     
     this.timerText=this.add.text(
-      500, 
+      300, 
       15,"TIME: " + this.timer,
     { fontSize: "30px",
-         fill: "#703F03", 
+         fill: "#FFFFFF", 
          fontFamily:"Lucida Console",
          fontWeight:"bold",});
 
@@ -281,7 +288,9 @@ this.treasure.body.enableBody=false;
        
       }
   //update de los disparos del enemigo
-      Phaser.Actions.RotateAroundDistance(this.balls.getChildren(), { x: 600, y: 300}, 0.02, this.tween.getValue());
+  
+    console.log(this.balls)
+      Phaser.Actions.RotateAroundDistance(this.balls.getChildren(), { x: 600, y: 300}, 0.02, this.tween.getValue())
   }
   
   

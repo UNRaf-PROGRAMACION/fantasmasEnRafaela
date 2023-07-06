@@ -55,7 +55,7 @@ this.doorSound=this.sound.add('openDoor')
  //  Jugador y sus configuraciones
     let spawnPoint = map.findObject("objetos", (obj) => obj.name === "jugador");
     console.log(spawnPoint);
-    this.jugador = this.physics.add.sprite(spawnPoint.x, spawnPoint.y, "fer");
+    this.jugador = this.physics.add.sprite(spawnPoint.x, spawnPoint.y, "fer").setInteractive(this.input.makePixelPerfect());
     this.jugador.setBounce(0.1);
     this.jugador.setCollideWorldBounds(true);
     console.log(this.jugador)
@@ -181,7 +181,7 @@ this.cursors = this.input.keyboard.createCursorKeys();
     );
     /// Textos en pantalla
     this.livesText = this.add.text(
-      15,
+      30,
       15,
       "LIVES:" + this.lives,
       { fontSize: "30px",
@@ -191,7 +191,7 @@ this.cursors = this.input.keyboard.createCursorKeys();
     );
 
     this.score = this.add.text(
-      300,
+      500,
       15,
       'SCORE:' + this.puntaje,
       { fontSize: "30px",
@@ -201,10 +201,10 @@ this.cursors = this.input.keyboard.createCursorKeys();
     );
   
   this.timerText=this.add.text(
-    500, 
+    300, 
     15,"TIME: " + this.timer,
   { fontSize: "30px",
-       fill: "#703F03", 
+       fill: "#FFFFFF", 
        fontFamily:"Lucida Console",
        fontWeight:"bold",});
 

@@ -28,6 +28,10 @@ export default class Preload extends Phaser.Scene {
       this.load.audio('coinS','./public/sounds/coin.mp3');
       this.load.audio('menuSound','./public/sounds/menuMusic.mp3')
       this.load.audio('openDoor','./public/sounds/openDoor.mp3')
+      this.load.spritesheet('titleL1', './public/images/titlesprite.png', {
+        frameWidth: 705,
+        frameHeight:340,
+      });
      
       this.load.spritesheet("playButton","./public/images/play.png", {
         frameWidth: 242,
@@ -54,7 +58,7 @@ export default class Preload extends Phaser.Scene {
       this.load.spritesheet("fer","./public/images/PJ-Sheet.png",{
         frameWidth: 64,
         frameHeight: 64,
-      });
+      })
       this.load.spritesheet("fantasma","./public/images/Ghosthat-sheet1.png",{
         frameWidth: 64,
         frameHeight: 64,
@@ -85,6 +89,12 @@ export default class Preload extends Phaser.Scene {
         frameRate: 10,
         repeat: -1,
       });
+      this.anims.create({
+        key:"tituloL1anim",
+        frames:this.anims.generateFrameNumbers("titleL1", { start: 0, end: 7 }),
+        frameRate: 10,
+        repeat: -1,
+      })
       this.anims.create({
         key: "front",
         frames: [{ key: "fer", frame: 0 }],

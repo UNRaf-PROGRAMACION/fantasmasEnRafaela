@@ -19,15 +19,11 @@ export default class Nivelcompleto extends Phaser.Scene {
       this.clic=this.sound.add('clic')
       this.background=this.add.image(200,15,'background')
       this.frameText=this.add.image(400,300,'frameText').setScale(0.08)
-      this.gameOverText = this.add.text(
-        230,
-        100,
-        "NIVEL 1 SUPERADO ",
-        { fontSize: "40px", fill: "#FFFFFF" }
-      );
+      this.titleText=this.add.sprite(400,100,'titleL1')
+      this.titleText.anims.play("tituloL1anim")
       this.puntajeText=this.add.text(
         100,
-        300,
+        330,
         "Puntaje " +this.puntaje,
         { fontSize: "30px", fill: "#FFFFFF" }
       )
